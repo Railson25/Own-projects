@@ -82,7 +82,8 @@ model Product {
   store store @relation("StoreToProduct", fields: [storeId], references: [id])
   categoryId String
   category Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name Decimal
+  name String
+  price Decimal
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
   sizeId String
