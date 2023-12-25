@@ -4,19 +4,28 @@ import Image from "next/image";
 import IconButton from "./icon-button";
 import { Expand, ShoppingCart } from "lucide-react";
 import Currency from "./currency";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   data: Product;
 }
 
 const ProductCard = ({ data }: ProductCardProps) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/product/${data?.id}`);
+  };
+
   return (
-    <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
+    <div
+      onClick={handleClick}
+      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+    >
       {/* image */}
       <div className="aspect-square rounded-xl bg-gray-100 relative">
         <Image
           alt="Image"
-          src={data.images?.[0]?.url}
+          src={data?.images?.[0]?.url}
           fill
           className="aspect-square object-cover rounded-md"
         />
@@ -36,7 +45,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
       {/* description */}
       <div>
         <p className="font-semibold text-lg">{data.name}</p>
-        <p className="t">{data.category?.name}</p>
+        <p className="text-sm text-gray-500">{data.category.name}</p>
       </div>
       {/* price */}
       <div className="flex items-center justify-between">
