@@ -31,7 +31,10 @@ interface BillboardFormProps {
 }
 
 const formSchema = z.object({
-  label: z.string().min(1),
+  label: z.string().default("").optional(),
+  subtitle: z.string().min(1),
+  descriptionSeason: z.string().default("").optional(),
+  paragraph: z.string().default("").optional(),
   imageUrl: z.string().min(1),
 });
 
@@ -54,6 +57,9 @@ export const BillboardForm = ({ initialData }: BillboardFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       label: "",
+      subtitle: "",
+      paragraph: "",
+      descriptionSeason: "",
       imageUrl: "",
     },
   });
@@ -154,6 +160,57 @@ export const BillboardForm = ({ initialData }: BillboardFormProps) => {
                     <Input
                       disabled={loading}
                       placeholder="Billboard label"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subtitle</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Billboard subtitle"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="descriptionSeason"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Billboard description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="paragraph"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Paragraph</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Billboard Paragraph"
                       {...field}
                     />
                   </FormControl>

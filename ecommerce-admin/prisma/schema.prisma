@@ -26,7 +26,10 @@ model Billboard {
   id String @id @default(uuid())
   storeId String
   store store @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label String
+  label String @default("")
+  subtitle String
+  descriptionSeason String @default("")
+  paragraph String @default("")
   imageUrl String
   categories Category[]
   createdAt DateTime @default(now())
