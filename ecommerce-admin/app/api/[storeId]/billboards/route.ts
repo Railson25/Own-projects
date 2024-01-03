@@ -11,13 +11,13 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { label, imageUrl } = body;
+    const { label, imageUrl, subtitle, descriptionSeason, paragraph } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!label) {
+    if (!subtitle) {
       return new NextResponse("Label is required", { status: 400 });
     }
 
@@ -44,6 +44,9 @@ export async function POST(
       data: {
         label,
         imageUrl,
+        subtitle,
+        paragraph,
+        descriptionSeason,
         storeId: params.storeId,
       },
     });
