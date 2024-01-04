@@ -3,6 +3,12 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+} from "./ui/navigation-menu";
 
 export const MainNav = ({
   className,
@@ -21,6 +27,11 @@ export const MainNav = ({
       href: `/${params.storeId}/billboards`,
       label: "Billboards",
       active: pathname === `/${params.storeId}/billboards`,
+    },
+    {
+      href: `/${params.storeId}/blogs`,
+      label: "Blogs",
+      active: pathname === `/${params.storeId}/blogs`,
     },
     {
       href: `/${params.storeId}/categories`,
@@ -55,21 +66,38 @@ export const MainNav = ({
   ];
 
   return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
-      {routes.map((route) => (
-        <Link
-          key={route.href}
-          href={route.href}
-          className={cn(
-            "text-sm font-medium transition-colors hover:text-primary",
-            route.active
-              ? "text-black dark:text-white"
-              : "text-muted-foreground"
-          )}
-        >
-          {route.label}
-        </Link>
-      ))}
-    </nav>
+    <NavigationMenu className="ml-auto list-none">
+      <NavigationMenuItem>
+        <NavigationMenuTrigger className="max-sm:hidden">
+          Options to your store
+        </NavigationMenuTrigger>
+        <NavigationMenuTrigger className="sm:hidden">
+          Options
+        </NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <ul
+            className={cn(
+              "grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]  ",
+              className
+            )}
+          >
+            {routes.map((route) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  route.active
+                    ? "text-black dark:text-white"
+                    : "text-muted-foreground"
+                )}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    </NavigationMenu>
   );
 };
