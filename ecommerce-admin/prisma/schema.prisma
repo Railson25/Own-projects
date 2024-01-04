@@ -13,6 +13,7 @@ model store {
   name String
   userId String
   billboards Billboard[] @relation("StoreToBillboard")
+  blogs Blog[] @relation("StoreToBlog")
   categories Category[] @relation("StoreToCategory")
   sizes Size[] @relation("StoreToSize")
   colors Color[] @relation("StoreToColor")
@@ -38,6 +39,20 @@ model Billboard {
   @@index([storeId])
 }
 
+model Blog {
+  id String @id @default(uuid())
+  storeId String
+  store store @relation("StoreToBlog", fields: [storeId], references: [id])
+  title String @default("")
+  description String @default("")
+  date String @default("")
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
 model Category{
   id String @id @default(uuid())
   storeId String
@@ -45,6 +60,7 @@ model Category{
 
   billboardId String
   billboard Billboard @relation(fields: [billboardId], references: [id])
+  
   products Product[] @relation("CategoryToProduct")
   name String
   createdAt DateTime @default(now())
