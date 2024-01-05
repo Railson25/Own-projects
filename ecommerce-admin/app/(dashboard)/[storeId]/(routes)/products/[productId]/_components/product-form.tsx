@@ -54,6 +54,7 @@ const formSchema = z.object({
   colorId: z.string().min(1),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
+  isArrival: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });
 
@@ -90,6 +91,7 @@ export const ProductForm = ({
           sizeId: "",
           colorId: "",
           isFeatured: false,
+          isArrival: false,
           isArchived: false,
         },
   });
@@ -326,6 +328,26 @@ export const ProductForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Featured</FormLabel>
+                    <FormDescription>
+                      This product will appear on the home page
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isArrival"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Arrival</FormLabel>
                     <FormDescription>
                       This product will appear on the home page
                     </FormDescription>
