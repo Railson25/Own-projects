@@ -106,6 +106,7 @@ model Product {
   price Decimal
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
+  isArrival Boolean @default(false)
   sizeId String
   size Size @relation(fields: [sizeId], references: [id])
   colorId String
