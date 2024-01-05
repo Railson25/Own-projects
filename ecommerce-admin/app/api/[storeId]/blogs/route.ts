@@ -3,6 +3,12 @@ import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -66,9 +72,12 @@ export async function GET(
       where: {
         storeId: params.storeId,
       },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
 
-    return NextResponse.json(blogs);
+    return NextResponse.json(blogs, { headers: corsHeaders });
   } catch (error) {
     console.log("[BLOGS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });

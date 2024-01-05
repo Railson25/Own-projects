@@ -26,6 +26,7 @@ export async function POST(
       images,
       isFeatured,
       isArchived,
+      isArrival,
     } = body;
 
     if (!userId) {
@@ -77,6 +78,7 @@ export async function POST(
         price,
         isArchived,
         isFeatured,
+        isArrival,
         storeId: params.storeId,
         images: {
           createMany: {
@@ -103,6 +105,7 @@ export async function GET(
     const sizeId = searchParams.get("sizeId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
+    const isArrival = searchParams.get("isArrival");
     const isArchived = searchParams.get("isArchived");
 
     if (!params.storeId) {
@@ -116,6 +119,7 @@ export async function GET(
         colorId,
         sizeId,
         isFeatured: isFeatured ? true : undefined,
+        isArrival: isArrival ? true : undefined,
         isArchived: false,
       },
       include: {
