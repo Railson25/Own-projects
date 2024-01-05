@@ -53,6 +53,7 @@ export async function PATCH(
       images,
       isFeatured,
       isArchived,
+      isArrival,
     } = body;
 
     if (!userId) {
@@ -106,6 +107,7 @@ export async function PATCH(
         },
         isFeatured,
         isArchived,
+        isArrival,
       },
     });
 
