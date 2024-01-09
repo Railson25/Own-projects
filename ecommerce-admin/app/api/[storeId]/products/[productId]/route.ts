@@ -54,6 +54,7 @@ export async function PATCH(
       isFeatured,
       isArchived,
       isArrival,
+      description,
     } = body;
 
     if (!userId) {
@@ -99,6 +100,7 @@ export async function PATCH(
       data: {
         name,
         price,
+        description,
         categoryId,
         colorId,
         sizeId,
