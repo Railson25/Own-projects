@@ -32,7 +32,7 @@ model Hotel{
   freeWifi Boolean @default(false)
   movieNights Boolean @default(false)
   swimmingPool Boolean @default(false)
-  coffeShop Boolean @default(false)
+  coffeeShop Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
