@@ -9,7 +9,7 @@ export const Header = () => {
     <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
       <div className="flex gap-4">
         <MenuItem icon={AiFillHome} src="/" title="Home" />
-        <MenuItem icon={BsFillInfoCircleFill} src="/" title="About" />
+        <MenuItem icon={BsFillInfoCircleFill} src="/about" title="About" />
       </div>
       <div className="flex gap-x-3 items-center">
         <DarkModeSwitch />
