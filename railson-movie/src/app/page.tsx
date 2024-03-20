@@ -11,7 +11,7 @@ export default async function Home({
   const movies = await getMovies(genre);
 
   return (
-    <div>
+    <div className="max-md:flex max-md:justify-center">
       <Movies movies={movies} />
     </div>
   );
