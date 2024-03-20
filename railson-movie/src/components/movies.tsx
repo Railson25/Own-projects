@@ -4,7 +4,7 @@ interface ResultProps {
   movies: Movie[];
 }
 
-export const Result = ({ movies }: ResultProps) => {
+export const Movies = ({ movies }: ResultProps) => {
   return (
     <div>
       {movies.map((movie) => (
