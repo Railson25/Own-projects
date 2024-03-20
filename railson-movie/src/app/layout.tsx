@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/app/providers";
 import { Header } from "@/components/header";
 import { Navbar } from "@/components/navbar";
+import { SeacrhBox } from "@/components/search-box";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Navbar />
+          <SeacrhBox />
           {children}
         </Providers>
       </body>
