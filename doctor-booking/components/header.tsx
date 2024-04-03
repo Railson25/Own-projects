@@ -1,45 +1,41 @@
-import Link from "next/link";
-import { LogoIcon } from "./icons/logo";
+import Image from "next/image";
+
 import { Button } from "./ui/button";
-import { FolderSearch, Home, User } from "lucide-react";
 
-export const Navbar = () => {
-  const menu = [
-    {
-      icon: <Home size={20} />,
-      name: "Home",
-      path: "/",
-    },
-    {
-      icon: <FolderSearch size={20} />,
-      name: "Explore",
-      path: "/explore",
-    },
-    {
-      icon: <User size={20} />,
-      name: "Contact us ",
-      path: "/contact",
-    },
-  ];
-
+export const Header = () => {
   return (
-    <div className="flex items-center justify-between p-4 shadow-sm ">
-      <div className="flex items-center gap-10 justify-between">
-        <LogoIcon color="#788998" />
-        <ul className="hidden gap-8 md:flex">
-          {menu.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className="flex gap-2 hover:text-primary cursor-pointer hover:scale-105 transition-all ease-in-out"
-            >
-              <div className="w-4 h-4">{link.icon}</div>
-              <li className=" font-medium">{link.name}</li>
-            </Link>
-          ))}
-        </ul>
+    <section>
+      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+          <div className="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full">
+            <Image
+              alt="Header image"
+              src="/images/doctors.jpg"
+              width={800}
+              height={800}
+              className="absolute inset-0 h-full w-full object-cover rounded-3xl"
+            />
+          </div>
+
+          <div className="lg:py-24">
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              Find & Book <span className="text-primary">Appointment</span> with
+              your Favorite <span className="text-primary">Doctors</span>
+            </h2>
+
+            <p className="mt-4 ">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut qui
+              hic atque tenetur quis eius quos ea neque sunt, accusantium soluta
+              minus veniam tempora deserunt? Molestiae eius quidem quam
+              repellat.
+            </p>
+
+            <Button className="mt-8 px-12 py-3 text-sm font-medium ">
+              Get Started Today
+            </Button>
+          </div>
+        </div>
       </div>
-      <Button>Get Started</Button>
-    </div>
+    </section>
   );
 };
