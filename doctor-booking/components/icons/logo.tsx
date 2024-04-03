@@ -11,7 +11,7 @@ export const LogoIcon = ({ color }: LogoIconProps) => {
       viewBox="0 0 40 41"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ fill: color }}
+      style={{ fill: color, width: "50px", height: "30px" }}
     >
       <path
         fill-rule="evenodd"
