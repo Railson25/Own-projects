@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div>
       <h1>wesrgr</h1>
-      <Button>Login</Button>
+      <Button>log in</Button>
     </div>
   );
 }
