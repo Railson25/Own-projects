@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { CategorySearch } from "@/components/category-search";
+import { Header } from "@/components/header";
 
 export default function Home() {
   return (
     <div>
-      <h1>Home Page</h1>
+      {/* Header */}
+      <Header />
+      <CategorySearch />
     </div>
   );
 }
