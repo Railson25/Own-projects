@@ -1,8 +1,27 @@
+"use client";
+
 import { Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { getCategory } from "@/app/_utils/global-api";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Category } from "@/types/types";
 
 export const CategorySearch = () => {
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategoryList();
+  }, []);
+
+  const getCategoryList = () => {
+    getCategory().then((resp) => {
+      console.log(resp.data.data);
+      setCategoryList(resp.data.data);
+    });
+  };
+
   return (
     <div className="mb-10 flex flex-col items-center gap-4">
       <h2 className="text-4xl font-bold tracking-wide">
@@ -18,6 +37,27 @@ export const CategorySearch = () => {
           <Search className="h-4 w-4 mr-2 " />
           Search
         </Button>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  gap-5 mt-5 ">
+        {categoryList.map(
+          (category, index) =>
+            index < 6 && (
+              <div
+                key={index}
+                className="flex flex-col text-center bg-secondary items-center  gap-2 p-2 rounded-lg hover:scale-110 transition-all ease-in-out cursor-pointer"
+              >
+                <Image
+                  src={category.attributes?.icon?.data.attributes?.url}
+                  alt="Icon"
+                  width={40}
+                  height={30}
+                />
+                <label className="text-sm text-foreground">
+                  {category.attributes.name}
+                </label>
+              </div>
+            )
+        )}
       </div>
     </div>
   );
