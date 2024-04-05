@@ -801,6 +801,11 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   attributes: {
     name: Attribute.String & Attribute.Required;
     icon: Attribute.Media & Attribute.Required;
+    doctors: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::doctor.doctor'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -812,6 +817,51 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDoctorDoctor extends Schema.CollectionType {
+  collectionName: 'doctors';
+  info: {
+    singularName: 'doctor';
+    pluralName: 'doctors';
+    displayName: 'Doctor';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Name: Attribute.String & Attribute.Required;
+    Address: Attribute.String & Attribute.Required;
+    Patients: Attribute.String;
+    Year_of_Experience: Attribute.String & Attribute.Required;
+    StartTime: Attribute.Time & Attribute.Required;
+    EndTime: Attribute.Time & Attribute.Required;
+    About: Attribute.Blocks & Attribute.Required;
+    category: Attribute.Relation<
+      'api::doctor.doctor',
+      'manyToOne',
+      'api::category.category'
+    >;
+    Phone: Attribute.String & Attribute.Required;
+    Image: Attribute.Media & Attribute.Required;
+    Premiun: Attribute.Boolean & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::doctor.doctor',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::doctor.doctor',
       'oneToOne',
       'admin::user'
     > &
@@ -869,6 +919,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
+      'api::doctor.doctor': ApiDoctorDoctor;
       'api::slider.slider': ApiSliderSlider;
     }
   }

@@ -22,6 +22,12 @@
       "type": "media",
       "multiple": false,
       "required": true
+    },
+    "doctors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::doctor.doctor",
+      "mappedBy": "category"
     }
   }
 }
