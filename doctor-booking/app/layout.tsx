@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <div className="px-2 md:px-20">
+        <div className="px-5 md:px-20">
           <Navbar />
           {children}
         </div>
