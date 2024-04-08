@@ -5,7 +5,7 @@ import { DoctorList } from "@/components/doctor-list";
 import { Header } from "@/components/header";
 import { getDoctorList } from "./_utils/global-api";
 import { useEffect, useState } from "react";
-import { ResponseDoctors, Doctor } from "@/types/types";
+import { Doctor } from "@/types/types";
 
 export default function Home() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -21,7 +21,6 @@ export default function Home() {
   };
   return (
     <div>
-      {/* Header */}
       <Header />
       <CategorySearch />
       <DoctorList doctors={doctors} />
