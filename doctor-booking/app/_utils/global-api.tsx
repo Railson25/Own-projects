@@ -1,4 +1,4 @@
-import { ResponseDoctors } from "@/types/types";
+import { Category, ResponseDoctors } from "@/types/types";
 import axios from "axios";
 
 const API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;

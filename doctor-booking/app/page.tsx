@@ -15,7 +15,6 @@ export default function Home() {
 
   const getDoctor = () => {
     getDoctorList().then((resp) => {
-      // console.log(resp.data.data);
       setDoctors(resp.data.data);
     });
   };

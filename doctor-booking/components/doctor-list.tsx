@@ -8,12 +8,11 @@ interface DoctorListProps {
 }
 
 export const DoctorList = ({ doctors }: DoctorListProps) => {
-  console.log(doctors);
   return (
     <div>
       <h2 className="font-bold text-3xl text-center mb-6">Popular Doctors</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 md:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 md:gap-5 max-md:place-items-center">
         {doctors.length > 0
           ? doctors.map((doctor) => (
               <div

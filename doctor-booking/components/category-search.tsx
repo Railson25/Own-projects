@@ -18,7 +18,6 @@ export const CategorySearch = () => {
 
   const getCategoryList = () => {
     getCategory().then((resp) => {
-      console.log(resp.data.data);
       setCategoryList(resp.data.data);
     });
   };
