@@ -7,6 +7,7 @@ import { getCategory } from "@/app/_utils/global-api";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Category } from "@/types/types";
+import { Skeleton } from "./ui/skeleton";
 
 export const CategorySearch = () => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -17,7 +18,6 @@ export const CategorySearch = () => {
 
   const getCategoryList = () => {
     getCategory().then((resp) => {
-      console.log(resp.data.data);
       setCategoryList(resp.data.data);
     });
   };
@@ -39,25 +39,32 @@ export const CategorySearch = () => {
         </Button>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6  gap-5 mt-5 ">
-        {categoryList.map(
-          (category, index) =>
-            index < 6 && (
-              <div
-                key={index}
-                className="flex flex-col text-center bg-secondary items-center  gap-2 p-2 rounded-lg hover:scale-110 transition-all ease-in-out cursor-pointer"
-              >
-                <Image
-                  src={category.attributes?.icon?.data.attributes?.url}
-                  alt="Icon"
-                  width={40}
-                  height={30}
-                />
-                <label className="text-sm text-foreground">
-                  {category.attributes.name}
-                </label>
-              </div>
+        {categoryList.length > 0
+          ? categoryList.map(
+              (category, index) =>
+                index < 6 && (
+                  <div
+                    key={index}
+                    className="flex flex-col text-center bg-secondary items-center  gap-2 p-2 rounded-lg hover:scale-110 transition-all ease-in-out cursor-pointer"
+                  >
+                    <Image
+                      src={category.attributes?.icon?.data.attributes?.url}
+                      alt="Icon"
+                      width={40}
+                      height={30}
+                    />
+                    <label className="text-sm text-foreground">
+                      {category.attributes.name}
+                    </label>
+                  </div>
+                )
             )
-        )}
+          : [1, 2, 3, 4, 5, 6].map((card, index) => (
+              <Skeleton
+                key={index}
+                className="h-[60px] w-[100px] rounded-lg  animate-pulse bg-primary-foreground"
+              />
+            ))}
       </div>
     </div>
   );
