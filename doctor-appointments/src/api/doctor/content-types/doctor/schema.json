@@ -39,12 +39,6 @@
       "type": "blocks",
       "required": true
     },
-    "category": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::category.category",
-      "inversedBy": "doctors"
-    },
     "Phone": {
       "type": "string",
       "required": true
@@ -60,6 +54,12 @@
     "Premiun": {
       "type": "boolean",
       "required": true
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "doctors"
     }
   }
 }

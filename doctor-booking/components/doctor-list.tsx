@@ -28,7 +28,7 @@ export const DoctorList = ({ doctors }: DoctorListProps) => {
                 />
                 <div className="mt-2 flex flex-col items-baseline gap-1">
                   <h3 className="text-sm bg-primary-foreground rounded-full px-2">
-                    {doctor.attributes.category.data?.attributes?.name}
+                    {doctor.attributes.category.data?.attributes.name}
                   </h3>
                   <p className="font-bold">{doctor.attributes.Name}</p>
                   <p className="text-sm  font-light">
