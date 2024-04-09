@@ -19,10 +19,14 @@ import { usePathname } from "next/navigation";
 
 export const CategoryList = () => {
   const pathname = usePathname();
-  const categoryName = pathname.split("/")[2].toLowerCase();
+  const categoryName = pathname.split("/")[2];
 
   const [categoryList, setCategoryList] = useState<Category[]>([]);
-  console.log(categoryName);
+
+  console.log(categoryList);
+  const normalizedCategoryName = categoryName
+    .replace(/%20/g, " ")
+    .toLocaleLowerCase();
 
   useEffect(() => {
     getCategoryList();
@@ -47,9 +51,10 @@ export const CategoryList = () => {
                 className="cursor-pointer  data-[disabled]:pointer-events-auto "
               >
                 <Link
-                  href="/"
+                  href={`/search/${category.attributes.name}`}
                   className={`p-2 flex gap-2 text-sm bg-background items-center rounded-md cursor-pointer w-full hover:bg-secondary ${
-                    categoryName === category.attributes.name.toLowerCase() &&
+                    normalizedCategoryName ===
+                      category.attributes.name.toLowerCase() &&
                     "bg-primary text-primary-foreground"
                   }`}
                 >

@@ -107,7 +107,6 @@ export interface Doctor {
   };
 }
 
-
 export interface ResponseDoctors {
   data: [Doctor];
 }

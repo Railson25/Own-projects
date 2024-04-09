@@ -794,13 +794,14 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     singularName: 'category';
     pluralName: 'categories';
     displayName: 'Category';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
     icon: Attribute.Media & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
     doctors: Attribute.Relation<
       'api::category.category',
       'oneToMany',
@@ -843,14 +844,14 @@ export interface ApiDoctorDoctor extends Schema.CollectionType {
     StartTime: Attribute.Time & Attribute.Required;
     EndTime: Attribute.Time & Attribute.Required;
     About: Attribute.Blocks & Attribute.Required;
+    Phone: Attribute.String & Attribute.Required;
+    Image: Attribute.Media & Attribute.Required;
+    Premiun: Attribute.Boolean & Attribute.Required;
     category: Attribute.Relation<
       'api::doctor.doctor',
       'manyToOne',
       'api::category.category'
     >;
-    Phone: Attribute.String & Attribute.Required;
-    Image: Attribute.Media & Attribute.Required;
-    Premiun: Attribute.Boolean & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
