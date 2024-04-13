@@ -18,7 +18,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} bg-purple-2`}>{children}</body>
+        <body
+          className={`${inter.className} bg-purple-2`}
+          suppressHydrationWarning
+        >
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
