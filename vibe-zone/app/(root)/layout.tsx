@@ -23,10 +23,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`bg-purple-2 ${inter.className}`}
+          className={`bg-purple-2 text-light-1 w-full h-full ${inter.className}`}
           suppressHydrationWarning
         >
-          <main className="flex">
+          <main className="flex flex-row">
             <LeftSideBar />
             <MainContainer>{children}</MainContainer>
             <RightSideBar />
