@@ -1,10 +1,11 @@
+import { HeroCarousel } from "@/components/hero-carrousel";
 import { SearchBar } from "@/components/search-bar";
 import { MoveRight } from "lucide-react";
 
 export default function Home() {
   return (
     <>
-      <section className="px-6 md:px-20 py-24 border-2 border-primary">
+      <section className="px-6 md:px-20 py-24 border-2 ">
         <div className="flex max-xl:flex-col gap-16">
           <div className="flex flex-col justify-center">
             <p className=" flex gap-2 text-sm font-medium text-primary">
@@ -21,6 +22,7 @@ export default function Home() {
             </p>
             <SearchBar />
           </div>
+          <HeroCarousel />
         </div>
       </section>
       <section className="flex flex-col gap-10 px-6 md:px-20 py-24">
