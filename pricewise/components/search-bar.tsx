@@ -1,5 +1,6 @@
 "use client";
 
+import { scrapeAndStoreProduct } from "@/lib/actions";
 import { AlertCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
@@ -10,8 +11,8 @@ export const SearchBar = () => {
 
   const isValidAmazonProductURL = (url: string) => {
     try {
-      const parseURL = new URL(url);
-      const hostname = parseURL.hostname;
+      const parsedURL = new URL(url);
+      const hostname = parsedURL.hostname;
 
       if (
         hostname.includes("amazon.com") ||
@@ -27,7 +28,7 @@ export const SearchBar = () => {
     return false;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const isValidLink = isValidAmazonProductURL(searchPrompt);
 
@@ -43,6 +44,8 @@ export const SearchBar = () => {
     }
     try {
       setIsLoading(true);
+
+      const product = await scrapeAndStoreProduct(searchPrompt);
     } catch (error) {
       console.log(error);
     } finally {
@@ -61,7 +64,7 @@ export const SearchBar = () => {
       />
       <button
         type="submit"
-        disabled={searchPrompt === ""}
+        disabled={searchPrompt === "" || isLoading}
         className="bg-gray-900 border border-gray-900 rounded-lg shadow-xl px-5 py-3 text-white text-base font-semibold hover:opacity-90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40"
       >
         {isLoading ? "Searching..." : "Search"}
