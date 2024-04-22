@@ -1,8 +1,13 @@
 import { HeroCarousel } from "@/components/hero-carrousel";
+import { ProductCard } from "@/components/product-card";
 import { SearchBar } from "@/components/search-bar";
+import { getAllProducts } from "@/lib/actions";
+import { Product } from "@/types";
 import { MoveRight } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getAllProducts();
+
   return (
     <>
       <section className="px-6 md:px-20 py-24 border-2 ">
@@ -28,7 +33,9 @@ export default function Home() {
       <section className="flex flex-col gap-10 px-6 md:px-20 py-24">
         <h2 className="text-secondary text-[32px] font-semibold">Trending</h2>
         <div className="flex flex-wrap gap-x-8 gap-y-16">
-          {/* TODO: products list */}
+          {products?.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
         </div>
       </section>
     </>
