@@ -2,7 +2,7 @@ import { HeroCarousel } from "@/components/hero-carrousel";
 import { ProductCard } from "@/components/product-card";
 import { SearchBar } from "@/components/search-bar";
 import { getAllProducts } from "@/lib/actions";
-import { Product } from "@/types";
+
 import { MoveRight } from "lucide-react";
 
 export default async function Home() {

@@ -1,9 +1,9 @@
-import { Product } from "@/types";
+import { TypeProduct } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ProductCardProps {
-  product: Product;
+  product: TypeProduct;
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {

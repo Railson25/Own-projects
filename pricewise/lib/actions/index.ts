@@ -4,6 +4,7 @@ import Product from "../models/product.model";
 import { connectToDB } from "../mongoose";
 import { scrapeAmazonProduct } from "../scraper";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "../utils";
+import { TypeProduct } from "@/types";
 
 export async function scrapeAndStoreProduct(productUrl: string) {
   if (!productUrl) return;
@@ -51,9 +52,13 @@ export async function getProductById(productId: string) {
   try {
     connectToDB();
 
-    const product = await Product.findOne({ _id: productId });
+    const product: TypeProduct | null = await Product.findOne({
+      _id: productId,
+    });
 
     if (!product) return null;
+
+    return product;
   } catch (error) {
     console.log(error);
   }
