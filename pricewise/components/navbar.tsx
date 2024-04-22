@@ -1,6 +1,6 @@
 import { navIcons } from "@/constants";
 import { BadgeDollarSign } from "lucide-react";
-import Image from "next/image";
+
 import Link from "next/link";
 
 export const Navbar = () => {

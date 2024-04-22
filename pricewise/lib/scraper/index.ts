@@ -55,9 +55,11 @@ export async function scrapeAmazonProduct(url: string) {
 
     const description = extractDescription($);
 
+    console.log("qwefgwsedsegrasegarsgarw", currency);
+
     const data = {
       url,
-      currency: currency || "$",
+      currency: currency || "R$",
       image: imageUrls[0],
       title,
       currentPrice: Number(currentPrice) || Number(originalPrice),

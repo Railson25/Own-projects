@@ -1,4 +1,4 @@
-import { PriceHistoryItem, Product } from "@/types";
+import { PriceHistoryItem, TypeProduct } from "@/types";
 
 const Notification = {
   WELCOME: "WELCOME",
@@ -8,6 +8,8 @@ const Notification = {
 };
 
 const THRESHOLD_MET = 40;
+let currencyTextProcessed = false;
+let currencyText: "";
 
 export function extractPrice(...elements: any) {
   for (const element of elements) {
@@ -19,9 +21,13 @@ export function extractPrice(...elements: any) {
 }
 
 export function extractCurrency(element: any) {
-  const currencyText = element.text().trim().slice(0, 1);
+  if (!currencyTextProcessed) {
+    const currencyText = element.text().trim();
 
-  return currencyText ? currencyText : "";
+    currencyTextProcessed = true;
+  }
+
+  return currencyText;
 }
 
 export function extractDescription($: any) {
@@ -68,8 +74,8 @@ export function getAveragePrice(priceList: PriceHistoryItem[]) {
 }
 
 export const getEmailNotifType = (
-  scrapedProduct: Product,
-  currentProduct: Product
+  scrapedProduct: TypeProduct,
+  currentProduct: TypeProduct
 ) => {
   const lowestPrice = getLowestPrice(currentProduct.priceHistory);
 
@@ -89,8 +95,5 @@ export const getEmailNotifType = (
 };
 
 export const formatNumber = (num: number = 0) => {
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
+  return num.toLocaleString();
 };

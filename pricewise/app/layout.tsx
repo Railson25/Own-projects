@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={spaceGrotesk.className}>
-        <main className="max-w-[1440px] mx-auto">
+        <main className="max-w-[1440px] mx-auto ">
           <Toaster />
           <Navbar />
           {children}
