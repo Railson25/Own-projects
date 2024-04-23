@@ -1,6 +1,18 @@
+import { PriceInfoCard } from "@/components/price-info-card";
 import { getProductById } from "@/lib/actions";
 import { formatNumber } from "@/lib/utils";
-import { Bookmark, Heart, Share2 } from "lucide-react";
+import {
+  ArrowBigDown,
+  ArrowBigUp,
+  BarChart4,
+  Bookmark,
+  Heart,
+  MessageSquareMore,
+  Receipt,
+  Share2,
+  ShoppingCart,
+  Star,
+} from "lucide-react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -67,8 +79,81 @@ const ProductDetails = async ({ params: { id } }: ProductDetailsProps) => {
                 {product.currency} {formatNumber(product.originalPrice)}
               </p>
             </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-3">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#fbf3e4] rounded-[27px]">
+                  <Star size={16} />
+                  <p className="text-sm text-primary-orange font-semibold">
+                    {product.stars || "25"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-black/5 rounded-[27px]">
+                  <MessageSquareMore size={16} />
+                  <p className="text-sm text-secondary font-semibold">
+                    {product.reviewsCount} Reviews
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm text-black opacity-50">
+                <span className="text-primary-green font-semibold">93%</span> of
+                buyers have recommended this.
+              </p>
+            </div>
+          </div>
+          <div className="my-7 flex flex-col gap-5">
+            <div className="flex gap-5 flex-wrap">
+              <PriceInfoCard
+                title="Current price"
+                icon={<Receipt className="text-primary-green" />}
+                value={`${product.currency} ${formatNumber(
+                  product.currentPrice
+                )}`}
+                borderColor="border-b-primary-green"
+              />
+              <PriceInfoCard
+                title="Average price"
+                icon={<BarChart4 className="text-[#8576FF] " />}
+                value={`${product.currency} ${formatNumber(
+                  product.averagePrice
+                )}`}
+                borderColor="border-b-[#8576FF]"
+              />
+              <PriceInfoCard
+                title="Highest price"
+                icon={<ArrowBigUp className="text-primary" />}
+                value={`${product.currency} ${formatNumber(
+                  product.highestPrice
+                )}`}
+                borderColor="border-b-primary"
+              />
+              <PriceInfoCard
+                title="Lowest price"
+                icon={<ArrowBigDown className="text-primary-orange" />}
+                value={`${product.currency} ${formatNumber(
+                  product.lowestPrice
+                )}`}
+                borderColor="border-b-primary-orange"
+              />
+            </div>
+          </div>
+          modal
+        </div>
+      </div>
+      <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-5">
+          <h3 className="text-2xl text-secondary font-semibold">
+            Product Description
+          </h3>
+          <div className="flex flex-col gap-4">
+            {product.description.split("\n")}
           </div>
         </div>
+        <button className="py-4 px-4 bg-secondary hover:bg-opacity-70 rounded-[30px] text-white text-lg font-semibold w-fit mx-auto flex items-center justify-center gap-3 min-w-[200px]">
+          <ShoppingCart size={22} />
+          <Link href="/" className="text-base text-white">
+            Buy Now
+          </Link>
+        </button>
       </div>
     </div>
   );

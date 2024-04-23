@@ -1,5 +1,12 @@
 import { PriceHistoryItem, TypeProduct } from "@/types";
 
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 const Notification = {
   WELCOME: "WELCOME",
   CHANGE_OF_STOCK: "CHANGE_OF_STOCK",
@@ -8,8 +15,6 @@ const Notification = {
 };
 
 const THRESHOLD_MET = 40;
-let currencyTextProcessed = false;
-let currencyText: "";
 
 export function extractPrice(...elements: any) {
   for (const element of elements) {
@@ -21,13 +26,10 @@ export function extractPrice(...elements: any) {
 }
 
 export function extractCurrency(element: any) {
-  if (!currencyTextProcessed) {
-    const currencyText = element.text().trim();
+  const currencyText = element.text().trim();
+  console.log("aqui mula");
 
-    currencyTextProcessed = true;
-  }
-
-  return currencyText;
+  return currencyText ? currencyText : "";
 }
 
 export function extractDescription($: any) {
