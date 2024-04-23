@@ -1,3 +1,4 @@
+import { Modal } from "@/components/modal";
 import { PriceInfoCard } from "@/components/price-info-card";
 import { ProductCard } from "@/components/product-card";
 import { getProductById, getSimilarProducts } from "@/lib/actions";
@@ -139,7 +140,7 @@ const ProductDetails = async ({ params: { id } }: ProductDetailsProps) => {
               />
             </div>
           </div>
-          modal
+          <Modal />
         </div>
       </div>
       <div className="flex flex-col gap-16">
