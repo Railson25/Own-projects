@@ -1,5 +1,7 @@
+import { Modal } from "@/components/modal";
 import { PriceInfoCard } from "@/components/price-info-card";
-import { getProductById } from "@/lib/actions";
+import { ProductCard } from "@/components/product-card";
+import { getProductById, getSimilarProducts } from "@/lib/actions";
 import { formatNumber } from "@/lib/utils";
 import {
   ArrowBigDown,
@@ -26,6 +28,8 @@ const ProductDetails = async ({ params: { id } }: ProductDetailsProps) => {
   const product = await getProductById(id);
 
   if (!product) redirect("/");
+
+  const similarProducts = await getSimilarProducts(id);
 
   return (
     <div className="flex flex-col gap-16 flex-wrap px-6 md:px-20 py-24">
@@ -136,7 +140,7 @@ const ProductDetails = async ({ params: { id } }: ProductDetailsProps) => {
               />
             </div>
           </div>
-          modal
+          <Modal />
         </div>
       </div>
       <div className="flex flex-col gap-16">
@@ -155,6 +159,19 @@ const ProductDetails = async ({ params: { id } }: ProductDetailsProps) => {
           </Link>
         </button>
       </div>
+
+      {similarProducts && similarProducts?.length > 0 && (
+        <div className="py-14 flex flex-col gap-2 w-full">
+          <p className="text-secondary text-[32px] font-semibold">
+            Similar products
+          </p>
+          <div className="flex flex-wrap gap-10 mt-7 w-full">
+            {similarProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
