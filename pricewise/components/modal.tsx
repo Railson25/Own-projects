@@ -1,12 +1,30 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, FormEvent } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import Image from "next/image";
-import { BadgeDollarSign, Mail, X } from "lucide-react";
 
-export const Modal = () => {
-  let [isOpen, setIsOpen] = useState(true);
+import { Mail, X } from "lucide-react";
+import { addUserEmailToProduct } from "@/lib/actions";
+
+interface ModalProps {
+  productId: string;
+}
+
+export const Modal = ({ productId }: ModalProps) => {
+  let [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    await addUserEmailToProduct(productId, email);
+
+    setIsSubmitting(false);
+    setEmail("");
+    closeModal();
+  };
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -15,8 +33,8 @@ export const Modal = () => {
     <>
       <button
         type="button"
-        onClick={openModal}
         className="py-4 px-4 bg-secondary hover:bg-opacity-70 rounded-[30px] text-white text-lg font-semibold"
+        onClick={openModal}
       >
         Track
       </button>
@@ -24,8 +42,8 @@ export const Modal = () => {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 z-10 overflow-y-auto bg-black bg-opacity-60"
           onClose={closeModal}
+          className="fixed inset-0 z-10 overflow-y-auto bg-black bg-opacity-60"
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -57,21 +75,26 @@ export const Modal = () => {
               <div className="p-6 bg-white inline-block w-full max-w-md my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
                 <div className="flex flex-col">
                   <div className="flex justify-between">
-                    <div className="p-3 border border-gray-20 rounded-xl">
+                    <div className="p-3 border border-gray-200 rounded-10">
                       <p className="text-[21px] font-bold text-secondary">
                         Price <span className="text-primary">wise</span>
                       </p>
                     </div>
+
                     <X className="cursor-pointer" onClick={closeModal} />
                   </div>
+
                   <h4 className="text-secondary text-lg leading-[24px] font-semibold">
-                    Stay updated with product pricing alerts right in your inbox
+                    Stay updated with product pricing alerts right in your
+                    inbox!
                   </h4>
+
                   <p className="text-sm text-gray-600 mt-2">
-                    Never miss a bargain again with our timely alerts
+                    Never miss a bargain again with our timely alerts!
                   </p>
                 </div>
-                <form className="flex flex-col mt-5">
+
+                <form className="flex flex-col mt-5" onSubmit={handleSubmit}>
                   <label
                     htmlFor="email"
                     className="text-sm font-medium text-gray-700"
@@ -79,20 +102,24 @@ export const Modal = () => {
                     Email address
                   </label>
                   <div className="px-5 py-3 mt-3 flex items-center gap-2 border border-gray-300 rounded-[27px]">
-                    <Mail size={18} className="" />
+                    <Mail size={18} />
+
                     <input
-                      placeholder="Enter your email"
                       required
                       type="email"
                       id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
                       className="flex-1 pl-1 border-none text-gray-500 text-base focus:outline-none border border-gray-300 rounded-[27px] "
                     />
                   </div>
+
                   <button
                     type="submit"
                     className="px-5 py-3 text-white text-base font-semibold border border-secondary bg-secondary rounded-lg mt-8 hover:opacity-65"
                   >
-                    Track
+                    {isSubmitting ? "Submitting..." : "Track"}
                   </button>
                 </form>
               </div>

@@ -1,10 +1,12 @@
 "use server";
+
 import { revalidatePath } from "next/cache";
 import Product from "../models/product.model";
 import { connectToDB } from "../mongoose";
 import { scrapeAmazonProduct } from "../scraper";
 import { getAveragePrice, getHighestPrice, getLowestPrice } from "../utils";
-import { TypeProduct } from "@/types";
+import { User } from "@/types";
+import { generateEmailBody, sendEmail } from "../nodemailer";
 
 export async function scrapeAndStoreProduct(productUrl: string) {
   if (!productUrl) return;
@@ -25,6 +27,7 @@ export async function scrapeAndStoreProduct(productUrl: string) {
         ...existingProduct.priceHistory,
         { price: scrapedProduct.currentPrice },
       ];
+
       product = {
         ...scrapedProduct,
         priceHistory: updatedPriceHistory,
@@ -35,9 +38,7 @@ export async function scrapeAndStoreProduct(productUrl: string) {
     }
 
     const newProduct = await Product.findOneAndUpdate(
-      {
-        url: scrapedProduct.url,
-      },
+      { url: scrapedProduct.url },
       product,
       { upsert: true, new: true }
     );
@@ -52,9 +53,7 @@ export async function getProductById(productId: string) {
   try {
     connectToDB();
 
-    const product: TypeProduct | null = await Product.findOne({
-      _id: productId,
-    });
+    const product = await Product.findOne({ _id: productId });
 
     if (!product) return null;
 
@@ -68,7 +67,8 @@ export async function getAllProducts() {
   try {
     connectToDB();
 
-    const products: TypeProduct[] = await Product.find();
+    const products = await Product.find();
+
     return products;
   } catch (error) {
     console.log(error);
@@ -80,13 +80,41 @@ export async function getSimilarProducts(productId: string) {
     connectToDB();
 
     const currentProduct = await Product.findById(productId);
+
     if (!currentProduct) return null;
 
-    const similarProducts: TypeProduct[] = await Product.find({
+    const similarProducts = await Product.find({
       _id: { $ne: productId },
     }).limit(3);
 
     return similarProducts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function addUserEmailToProduct(
+  productId: string,
+  userEmail: string
+) {
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) return;
+
+    const userExists = product.users.some(
+      (user: User) => user.email === userEmail
+    );
+
+    if (userExists) {
+      product.users.push({ email: userEmail });
+
+      await product.save();
+
+      const emailContent = await generateEmailBody(product, "WELCOME");
+
+      await sendEmail(emailContent, [userEmail]);
+    }
   } catch (error) {
     console.log(error);
   }
