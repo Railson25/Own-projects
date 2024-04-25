@@ -51,15 +51,7 @@ export async function GET(request: Request) {
           product
         );
 
-        const scrapedProductWithAveragePrice = {
-          ...scrapedProduct,
-          averagePrice: getAveragePrice(scrapedProduct.priceHistory),
-        };
-
-        const emailNotifType = getEmailNotifType(
-          scrapedProductWithAveragePrice,
-          currentProduct
-        );
+        const emailNotifType = getEmailNotifType(product, currentProduct);
 
         if (emailNotifType && updatedProduct.users.length > 0) {
           const productInfo = {
