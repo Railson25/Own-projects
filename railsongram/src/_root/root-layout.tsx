@@ -1,5 +1,7 @@
+import { Button } from "@/components/ui/button";
+
 const RootLayout = () => {
-  return <p>root layout</p>;
+  return <div>yuigjujiyhk</div>;
 };
 
 export default RootLayout;
