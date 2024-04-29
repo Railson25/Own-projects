@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { signUpSchema } from "@/lib/validation";
 import { Loader } from "@/components/shared/loader";
 import { Link } from "react-router-dom";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 export const SignUpForm = () => {
   const isLoading = false;
@@ -32,7 +33,11 @@ export const SignUpForm = () => {
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    const newUser = await createUserAccount(values);
+
+    console.log(newUser);
+  };
 
   return (
     <Form {...form}>

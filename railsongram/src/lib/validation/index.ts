@@ -11,5 +11,5 @@ export const signUpSchema = z.object({
     })
     .max(20),
   email: z.string().email(),
-  password: z.string().min(6, { message: "Too short" }),
+  password: z.string().min(8, { message: "Too short" }),
 });
