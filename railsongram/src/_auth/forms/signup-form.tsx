@@ -16,13 +16,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signUpSchema } from "@/lib/validation";
 import { Loader } from "@/components/shared/loader";
-import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { Link, useNavigate } from "react-router-dom";
+
 import { useToast } from "@/components/ui/use-toast";
+import {
+  useCreateUserAccount,
+  userSignInAccount,
+} from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/auth-context";
 
 export const SignUpForm = () => {
   const { toast } = useToast();
-  const isLoading = false;
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -34,16 +40,49 @@ export const SignUpForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-    const newUser = await createUserAccount(values);
+  const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } =
+    useCreateUserAccount();
 
-    if (!newUser) {
-      return toast({
-        title: "Sign up failed. Please try again",
+  const { mutateAsync: signInAccount, isLoading: isSigninUser } =
+    userSignInAccount();
+
+  const handleSignUp = async (user: z.infer<typeof signUpSchema>) => {
+    try {
+      const newUser = await createUserAccount(user);
+
+      if (!newUser) {
+        toast({ title: "Sign up failed. Please try again." });
+
+        return;
+      }
+
+      const session = await signInAccount({
+        email: user.email,
+        password: user.password,
       });
-    }
 
-    // const session = await signInAccount()
+      if (!session) {
+        toast({ title: "Something went wrong. Please login your new account" });
+
+        navigate("/sign-in");
+
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+
+      if (isLoggedIn) {
+        form.reset();
+
+        navigate("/");
+      } else {
+        toast({ title: "Login failed. Please try again." });
+
+        return;
+      }
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (
@@ -61,7 +100,7 @@ export const SignUpForm = () => {
         </p>
 
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleSignUp)}
           className="flex flex-col gap-5 w-full mt-4">
           <FormField
             control={form.control}
@@ -115,8 +154,11 @@ export const SignUpForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="shad-button_primary">
-            {isLoading ? (
+          <Button
+            type="submit"
+            className="shad-button_primary"
+            disabled={isCreatingAccount || isSigninUser || isUserLoading}>
+            {isCreatingAccount || isSigninUser || isUserLoading ? (
               <div className="flex-center gap-2">
                 <Loader />
                 Loading..
