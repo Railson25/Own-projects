@@ -1,6 +1,12 @@
+import * as z from "zod";
+import { Models } from "appwrite";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { useNavigate } from "react-router-dom";
+
+import { postSchema } from "@/lib/validation";
+import { useUserContext } from "@/context/auth-context";
+
 import {
   Form,
   FormControl,
@@ -9,25 +15,49 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-
 import { Textarea } from "../ui/textarea";
 import { FileUploader } from "../shared/file-uploader";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { toast } from "../ui/use-toast";
+import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
 
-const formSchema = z.object({
-  username: z.string(),
-});
+type PostFormProps = {
+  post?: Models.Document;
+};
 
-export const PostForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export const PostForm = ({ post }: PostFormProps) => {
+  const navigate = useNavigate();
+
+  const { user } = useUserContext();
+
+  const form = useForm<z.infer<typeof postSchema>>({
+    resolver: zodResolver(postSchema),
     defaultValues: {
-      username: "",
+      caption: post ? post?.caption : "",
+      file: [],
+      location: post ? post?.location : "",
+      tags: post ? post?.tags.join(",") : "",
     },
   });
 
-  const onSubmit = () => {};
+  const { mutateAsync: createPost, isLoading: isLoadingCreate } =
+    useCreatePost();
+
+  const onSubmit = async (values: z.infer<typeof postSchema>) => {
+    console.log(values);
+    const newPost = await createPost({
+      ...values,
+      userId: user.id,
+    });
+
+    if (!newPost) {
+      toast({
+        title: "Please try again",
+      });
+    }
+    navigate("/");
+  };
 
   return (
     <Form {...form}>
@@ -36,7 +66,7 @@ export const PostForm = () => {
         className="flex flex-col gap-9 w-full max-w-5xl">
         <FormField
           control={form.control}
-          name="username"
+          name="caption"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Caption</FormLabel>
@@ -52,12 +82,15 @@ export const PostForm = () => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="file"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Add Photos</FormLabel>
               <FormControl>
-                <FileUploader />
+                <FileUploader
+                  fieldChange={field.onChange}
+                  mediaUrl={post?.imageUrl}
+                />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
@@ -65,12 +98,12 @@ export const PostForm = () => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Add Location</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" />
+                <Input type="text" className="shad-input" {...field} />
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
@@ -78,7 +111,7 @@ export const PostForm = () => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="tags"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">
@@ -89,6 +122,7 @@ export const PostForm = () => {
                   type="text"
                   className="shad-input"
                   placeholder="Art, Expression, Learn"
+                  {...field}
                 />
               </FormControl>
               <FormMessage className="shad-form_message" />
@@ -101,7 +135,8 @@ export const PostForm = () => {
           </Button>
           <Button
             type="submit"
-            className="shad-button_primary whitespace-nowrap">
+            className="shad-button_primary whitespace-nowrap"
+            disabled={isLoadingCreate}>
             Submit
           </Button>
         </div>
