@@ -1,12 +1,16 @@
 import * as z from "zod";
 import { Models } from "appwrite";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { postSchema } from "@/lib/validation";
+import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/auth-context";
-
+import { postSchema } from "@/lib/validation";
+import {
+  useCreatePost,
+  useUpdatePost,
+} from "@/lib/react-query/queriesAndMutations";
 import {
   Form,
   FormControl,
@@ -16,44 +20,64 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
-import { FileUploader } from "../shared/file-uploader";
+import FileUploader from "../shared/file-uploader";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import { Loader } from "../shared/loader";
 
 type PostFormProps = {
   post?: Models.Document;
+  action: "Create" | "Update";
 };
 
-export const PostForm = ({ post }: PostFormProps) => {
+export const PostForm = ({ post, action }: PostFormProps) => {
   const navigate = useNavigate();
-
+  const { toast } = useToast();
   const { user } = useUserContext();
-
   const form = useForm<z.infer<typeof postSchema>>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       caption: post ? post?.caption : "",
       file: [],
-      location: post ? post?.location : "",
-      tags: post ? post?.tags.join(",") : "",
+      location: post ? post.location : "",
+      tags: post ? post.tags.join(",") : "",
     },
   });
 
+  // Query
   const { mutateAsync: createPost, isLoading: isLoadingCreate } =
     useCreatePost();
+  const { mutateAsync: updatePost, isLoading: isLoadingUpdate } =
+    useUpdatePost();
 
-  const onSubmit = async (values: z.infer<typeof postSchema>) => {
-    console.log(values);
+  // Handler
+  const handleSubmit = async (value: z.infer<typeof postSchema>) => {
+    // ACTION = UPDATE
+    if (post && action === "Update") {
+      const updatedPost = await updatePost({
+        ...value,
+        postId: post.$id,
+        imageId: post.imageId,
+        imageUrl: post.imageUrl,
+      });
+
+      if (!updatedPost) {
+        toast({
+          title: `${action} post failed. Please try again.`,
+        });
+      }
+      return navigate(`/`);
+    }
+
+    // ACTION = CREATE
     const newPost = await createPost({
-      ...values,
+      ...value,
       userId: user.id,
     });
 
     if (!newPost) {
       toast({
-        title: "Please try again",
+        title: `${action} post failed. Please try again.`,
       });
     }
     navigate("/");
@@ -62,8 +86,8 @@ export const PostForm = ({ post }: PostFormProps) => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-9 w-full max-w-5xl">
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex flex-col gap-9 w-full  max-w-5xl">
         <FormField
           control={form.control}
           name="caption"
@@ -80,6 +104,7 @@ export const PostForm = ({ post }: PostFormProps) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="file"
@@ -96,6 +121,7 @@ export const PostForm = ({ post }: PostFormProps) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="location"
@@ -109,6 +135,7 @@ export const PostForm = ({ post }: PostFormProps) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="tags"
@@ -119,9 +146,9 @@ export const PostForm = ({ post }: PostFormProps) => {
               </FormLabel>
               <FormControl>
                 <Input
+                  placeholder="Art, Expression, Learn"
                   type="text"
                   className="shad-input"
-                  placeholder="Art, Expression, Learn"
                   {...field}
                 />
               </FormControl>
@@ -129,15 +156,20 @@ export const PostForm = ({ post }: PostFormProps) => {
             </FormItem>
           )}
         />
+
         <div className="flex gap-4 items-center justify-end">
-          <Button type="button" className="shad-button_dark_4">
+          <Button
+            type="button"
+            className="shad-button_dark_4"
+            onClick={() => navigate(-1)}>
             Cancel
           </Button>
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
-            disabled={isLoadingCreate}>
-            Submit
+            disabled={isLoadingCreate || isLoadingUpdate}>
+            {(isLoadingCreate || isLoadingUpdate) && <Loader />}
+            {action} Post
           </Button>
         </div>
       </form>
