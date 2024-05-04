@@ -66,7 +66,7 @@ export const PostForm = ({ post, action }: PostFormProps) => {
           title: `${action} post failed. Please try again.`,
         });
       }
-      return navigate(`/`);
+      return navigate(`/post/${post.$id}`);
     }
 
     // ACTION = CREATE
