@@ -19,7 +19,13 @@ const PostDetails = () => {
         <Loader />
       ) : (
         <div className="post_details-card">
-          <img src={post?.imageUrl} alt="post" className="post_details-img" />
+          <div className="relative w-full xl:w-1/2 h-[640px] mb-5">
+            <img
+              src={post?.imageUrl}
+              alt="post"
+              className="rounded-t-3xl absolute h-full w-full object-cover xl:object-top "
+            />
+          </div>
           <div className="post_details-info max-[468px]:p-3 ">
             <div className="flex-between w-full max-[468px]:flex-col max-[468px]:items-start max-[468px]:gap-1 ">
               <Link

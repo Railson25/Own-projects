@@ -56,7 +56,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         </Link>
       </div>
 
-      <Link to={`/posts/${post.$id}`}>
+      <Link to={`/post/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex gap-1 mt-2">
@@ -68,11 +68,13 @@ export const PostCard = ({ post }: PostCardProps) => {
           </ul>
         </div>
 
-        <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
-          alt="post image"
-          className="post-card_img"
-        />
+        <div className="relative w-full h-[640px] mb-5">
+          <img
+            src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+            alt="post image"
+            className="post-card_img"
+          />
+        </div>
       </Link>
 
       <PostStats post={post} userId={user.id} />
