@@ -68,11 +68,13 @@ export const PostCard = ({ post }: PostCardProps) => {
           </ul>
         </div>
 
-        <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
-          alt="post image"
-          className="post-card_img"
-        />
+        <div className="relative w-full h-[640px] mb-5">
+          <img
+            src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+            alt="post image"
+            className="post-card_img"
+          />
+        </div>
       </Link>
 
       <PostStats post={post} userId={user.id} />
