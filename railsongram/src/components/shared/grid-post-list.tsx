@@ -21,11 +21,13 @@ export const GridPostList = ({
       {posts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
           <Link to={`/posts/${post.$id}`} className="grid-post_link">
-            <img
-              src={post.imageUrl}
-              alt="post"
-              className="h-full w-full object-cover object-center"
-            />
+            <div className="relative w-full h-[640px] mb-5">
+              <img
+                src={post.imageUrl}
+                alt="post"
+                className="object-center w-full h-full object-cover "
+              />
+            </div>
           </Link>
 
           <div className="grid-post_user">
