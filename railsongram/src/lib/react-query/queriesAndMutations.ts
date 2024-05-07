@@ -13,6 +13,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPost,
+  getUserById,
   getUserPosts,
   getUsers,
   likePost,
@@ -221,5 +222,13 @@ export async function useGetDeletePost() {
         queryKey: [QUERY_KEYS.GET_RECENT_POST],
       });
     },
+  });
+}
+
+export function useGetUserById(userId: string) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
   });
 }
