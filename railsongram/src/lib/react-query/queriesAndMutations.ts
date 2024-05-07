@@ -13,6 +13,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPost,
+  getUserPosts,
   getUsers,
   likePost,
   savePost,
@@ -162,7 +163,7 @@ export const useDeletePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
+    mutationFn: ({ postId, imageId }: { postId?: string; imageId: string }) =>
       deletePost(postId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -201,3 +202,24 @@ export const useGetUsers = (limit?: number) => {
     queryFn: () => getUsers(limit),
   });
 };
+
+export async function useGetUserPosts(userId?: string) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => getUserPosts(userId),
+    enabled: !!userId,
+  });
+}
+
+export async function useGetDeletePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, imageId }: { postId?: string; imageId: string }) =>
+      deletePost(postId, imageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POST],
+      });
+    },
+  });
+}
