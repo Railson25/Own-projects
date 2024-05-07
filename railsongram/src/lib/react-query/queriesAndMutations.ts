@@ -13,6 +13,8 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPost,
+  getUserPosts,
+  getUsers,
   likePost,
   savePost,
   searchPosts,
@@ -94,8 +96,8 @@ export const useSavePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, userId }: { postId: string; userId: string }) =>
-      savePost(postId, userId),
+    mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
+      savePost(userId, postId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POST],
@@ -161,7 +163,7 @@ export const useDeletePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, imageId }: { postId: string; imageId: string }) =>
+    mutationFn: ({ postId, imageId }: { postId?: string; imageId: string }) =>
       deletePost(postId, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -176,10 +178,11 @@ export const useGetPosts = () => {
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts as any,
     getNextPageParam: (lastPage: any) => {
-      if ((lastPage && lastPage.documents, length === 0)) return null;
+      if (lastPage && lastPage.documents.length === 0) {
+        return null;
+      }
 
       const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
-
       return lastId;
     },
   });
@@ -187,8 +190,36 @@ export const useGetPosts = () => {
 
 export const useSearchPosts = (searchTerm: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.SEARCH_POSTS],
+    queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
     queryFn: () => searchPosts(searchTerm),
     enabled: !!searchTerm,
   });
 };
+
+export const useGetUsers = (limit?: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: () => getUsers(limit),
+  });
+};
+
+export async function useGetUserPosts(userId?: string) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => getUserPosts(userId),
+    enabled: !!userId,
+  });
+}
+
+export async function useGetDeletePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, imageId }: { postId?: string; imageId: string }) =>
+      deletePost(postId, imageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POST],
+      });
+    },
+  });
+}
