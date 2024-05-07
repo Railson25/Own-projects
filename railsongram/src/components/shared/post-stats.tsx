@@ -43,6 +43,10 @@ export const PostStats = ({ post, userId }: PostStatsProps) => {
   ) => {
     e.stopPropagation();
 
+    if (!post) {
+      return null;
+    }
+
     let likesArray = [...likes];
 
     if (likesArray.includes(userId)) {

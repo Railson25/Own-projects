@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
 import { Loader } from "@/components/shared/loader";
 import { multiFormatDateString } from "@/lib/utils";
@@ -8,8 +8,9 @@ import { PostStats } from "@/components/shared/post-stats";
 
 const PostDetails = () => {
   const { id } = useParams();
-  const { data: post, isLoading } = useGetPostById(id || "");
   const { user } = useUserContext();
+
+  const { data: post, isLoading } = useGetPostById(id);
 
   const handleDeletePost = () => {};
 
