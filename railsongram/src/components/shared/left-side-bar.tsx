@@ -26,11 +26,13 @@ export const LeftSideBar = () => {
           </p>
         </Link>
         <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
-          <img
-            src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-            alt="profile"
-            className="rounded-full h-14 w-14"
-          />
+          <div className=" relative h-14 w-14 ">
+            <img
+              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="rounded-full absolute w-full h-full object-cover"
+            />
+          </div>
           <div className="flex flex-col ">
             <p className="body-bold">{user.name}</p>
             <p className="small-regular text-light-3">@{user.username}</p>
