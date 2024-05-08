@@ -30,11 +30,13 @@ export const TopBar = () => {
             <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
           <Link to={`/profile/${user.id}`} className="flex-center gap-3">
-            <img
-              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-              alt="profile"
-              className="rounded-full h-8 w-8"
-            />
+            <div className="h-10 w-10 relative">
+              <img
+                src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                alt="profile"
+                className="rounded-full absolute w-full h-full object-cover"
+              />
+            </div>
           </Link>
         </div>
       </div>

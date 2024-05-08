@@ -33,11 +33,13 @@ export const GridPostList = ({
           <div className="grid-post_user">
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1">
-                <img
-                  src={post.creator.imageUrl}
-                  alt="creator"
-                  className="h-8 w-8 rounded-full"
-                />
+                <div className="h-10 w-10 relative">
+                  <img
+                    src={post.creator.imageUrl}
+                    alt="creator"
+                    className="absolute h-full w-full rounded-full object-cover"
+                  />
+                </div>
                 <p className="line-clamp-1">{post.creator.name}</p>
               </div>
             )}
