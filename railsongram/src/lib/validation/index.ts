@@ -31,7 +31,7 @@ export const profileSchema = z.object({
 
 export const postSchema = z.object({
   caption: z.string().min(1).max(2200),
-  file: z.custom<File[]>(),
+  file: z.string().min(3),
   location: z.string().min(2).max(100),
   tags: z.string(),
 });
