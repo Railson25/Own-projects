@@ -101,21 +101,10 @@ export async function signOutAccount() {
 
 export async function createPost(post: INewPost) {
   try {
-    const uploadedFile = await uploadFile(post.file[0]);
-
-    if (!uploadedFile) throw Error;
-
-    const fileUrlPromise = getFilePreview(uploadedFile.$id);
-
-    if (!fileUrlPromise) {
-      deleteFile(uploadedFile.$id);
-      throw Error;
-    }
-
-    const fileUrl = (await fileUrlPromise)?.toString();
+    const fileUrl = await getFilePreview(post.file);
 
     if (!fileUrl) {
-      deleteFile(uploadedFile.$id);
+      deleteFile(post.file);
       throw Error;
     }
 
@@ -129,14 +118,14 @@ export async function createPost(post: INewPost) {
         creator: post.userId,
         caption: post.caption,
         imageUrl: fileUrl,
-        imageId: uploadedFile.$id,
+        imageId: post.file,
         location: post.location,
         tags: tags,
       }
     );
 
     if (!newPost) {
-      await deleteFile(uploadedFile.$id);
+      await deleteFile(post.file);
       throw Error;
     }
 
@@ -181,6 +170,7 @@ export async function getFilePreview(fileId: string) {
 
 export async function deleteFile(fileId: string) {
   try {
+    console.log("Deleting file with ID:", fileId);
     await storage.deleteFile(appwriteConfig.storageId, fileId);
 
     return { status: "Ok" };
@@ -285,7 +275,7 @@ export async function updatePost(post: IUpdatePost) {
 
     if (hasFileToUpdate) {
       // Upload new file to appwrite storage
-      const uploadedFile = await uploadFile(post.file[0]);
+      const uploadedFile = await uploadFile(post.imageUrl);
       if (!uploadedFile) throw Error;
 
       const fileUrlPromise = getFilePreview(uploadedFile.$id);

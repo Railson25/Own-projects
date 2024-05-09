@@ -40,14 +40,16 @@ const PostDetails = () => {
               <Link
                 to={`/profile/${post?.creator.$id}`}
                 className="flex items-center gap-3">
-                <img
-                  src={
-                    post?.creator?.imageUrl ||
-                    "/assets/icons/profile-placeholder.svg"
-                  }
-                  alt="creator"
-                  className="w-8 h-8 lg:h-12 lg:w-12 rounded-full"
-                />
+                <div className="relative h-12 w-12 ">
+                  <img
+                    src={
+                      post?.creator?.imageUrl ||
+                      "/assets/icons/profile-placeholder.svg"
+                    }
+                    alt="creator"
+                    className="absolute w-full h-full object-cover rounded-full"
+                  />
+                </div>
                 <div className="flex flex-col">
                   <p className="base-medium lg:body-bold text-light-1">
                     {post?.creator.name}
